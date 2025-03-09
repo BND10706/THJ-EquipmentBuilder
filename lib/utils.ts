@@ -10,7 +10,9 @@ export function getAssetPath(path: string): string {
   // In the browser, we can use window.location to check if we're on GitHub Pages
   if (typeof window !== 'undefined') {
     const isGitHubPages = window.location.hostname.includes('github.io');
-    return isGitHubPages ? `/THJ-EquipmentBuilder${path}` : path;
+    // Remove any leading slash from the path to avoid double slashes
+    const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+    return isGitHubPages ? `/THJ-EquipmentBuilder/${cleanPath}` : `/${cleanPath}`;
   }
   // During SSR/build, return the path as is
   return path;
