@@ -2,6 +2,7 @@
 
 import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core"
 import { useState } from "react"
+import { EQUIPMENT_ICONS, type EquipmentSlot as EquipmentSlotType } from "../lib/equipment-icons"
 
 // Define slot positions in a 4x6 grid
 const EQUIPMENT_LAYOUT = {
@@ -29,7 +30,7 @@ const EQUIPMENT_LAYOUT = {
   ],
   row6: [
     { id: "Legs", col: 1 },
-    { id: "Arms2", col: 2 },
+    { id: "Hands", col: 2 },
     { id: "Charm", col: 3 },
     { id: "Feet", col: 4 }
   ],
@@ -349,11 +350,12 @@ export function EquipmentBuilder() {
 
 function EquipmentSlot({ id, equippedItem }: { id: string; equippedItem?: any }) {
   const { setNodeRef, isOver } = useDroppable({ id })
+  const iconPath = EQUIPMENT_ICONS[id as EquipmentSlotType]
 
   return (
     <div
       ref={setNodeRef}
-      className={`w-16 h-16 flex items-center justify-center text-xs text-center ${
+      className={`w-16 h-16 flex items-center justify-center text-xs text-center relative ${
         isOver 
           ? "bg-primary/20" 
           : "bg-card"
@@ -362,7 +364,13 @@ function EquipmentSlot({ id, equippedItem }: { id: string; equippedItem?: any })
       {equippedItem ? (
         <span className="text-xs break-words">{equippedItem}</span>
       ) : (
-        <span className="text-muted-foreground">{id}</span>
+        iconPath && (
+          <img 
+            src={iconPath} 
+            alt={id} 
+            className="w-8 h-8 opacity-30"
+          />
+        )
       )}
     </div>
   )
