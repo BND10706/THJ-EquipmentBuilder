@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  basePath: '/THJ-EquipmentBuilder',
+  basePath: process.env.NODE_ENV === 'production' ? '/THJ-EquipmentBuilder' : '',
   images: {
     unoptimized: true,
   },
