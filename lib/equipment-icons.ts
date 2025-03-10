@@ -5,23 +5,23 @@ export const EQUIPMENT_ICONS = {
   // Head area
   Head: getAssetPath('icons/equipment/head.svg'),
   Face: getAssetPath('icons/equipment/face.svg'),
-  Ear1: getAssetPath('icons/equipment/ear.svg'),
-  Ear2: getAssetPath('icons/equipment/ear.svg'),
+  EarLeft: getAssetPath('icons/equipment/ear.svg'),
+  EarRight: getAssetPath('icons/equipment/ear.svg'),
   
   // Torso area
   Chest: getAssetPath('icons/equipment/chest.svg'),
   Back: getAssetPath('icons/equipment/back.svg'),
-  Shoulders: getAssetPath('icons/equipment/shoulders.svg'),
+  Shoulder: getAssetPath('icons/equipment/shoulders.svg'),
   Arms: getAssetPath('icons/equipment/arms.svg'),
   Hands: getAssetPath('icons/equipment/hands.svg'),
   
   // Accessories
   Neck: getAssetPath('icons/equipment/neck.svg'),
-  Wrist1: getAssetPath('icons/equipment/wrist.svg'),
-  Wrist2: getAssetPath('icons/equipment/wrist.svg'),
-  Belt: getAssetPath('icons/equipment/belt.svg'),
-  Ring1: getAssetPath('icons/equipment/ring.svg'),
-  Ring2: getAssetPath('icons/equipment/ring.svg'),
+  BracerLeft: getAssetPath('icons/equipment/wrist.svg'),
+  BracerRight: getAssetPath('icons/equipment/wrist.svg'),
+  Waist: getAssetPath('icons/equipment/belt.svg'),
+  RingLeft: getAssetPath('icons/equipment/ring.svg'),
+  RingRight: getAssetPath('icons/equipment/ring.svg'),
   
   // Lower body
   Legs: getAssetPath('icons/equipment/legs.svg'),
@@ -29,7 +29,7 @@ export const EQUIPMENT_ICONS = {
   
   // Special items
   Charm: getAssetPath('icons/equipment/charm.svg'),
-  Power: getAssetPath('icons/equipment/power.svg'),
+  Powersource: getAssetPath('icons/equipment/power.svg'),
   
   // Weapons and ammo
   Primary: getAssetPath('icons/equipment/weapon.svg'),
