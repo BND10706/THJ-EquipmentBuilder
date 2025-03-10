@@ -189,11 +189,12 @@ const canEquipInSlot = (itemSlot: number, targetSlotId: string) => {
 
 function ItemTooltip({ item, isEquipped }: { item: Item; isEquipped?: boolean }) {
   const renderStatLine = (label: string, value: number | undefined, heroicValue: number | undefined) => {
+    if (!value && !heroicValue) return null;
     return (
       <div className="flex items-center gap-1">
         <span className="w-24">{label}:</span>
-        <span className="w-8 text-right">{value && value > 0 ? value : ''}</span>
-        {heroicValue && heroicValue > 0 && <span className="text-yellow-400 ml-1">+{heroicValue}</span>}
+        {value && value > 0 && <span className="w-8 text-right">{value}</span>}
+        {heroicValue && heroicValue > 0 && <span className="text-yellow-400">+{heroicValue}</span>}
       </div>
     );
   };
@@ -208,8 +209,8 @@ function ItemTooltip({ item, isEquipped }: { item: Item; isEquipped?: boolean })
 
   if (isEquipped) {
     return (
-      <div className="bg-black/90 border border-gray-600 p-4 rounded-lg shadow-lg w-[700px]">
-        <div className="flex justify-between items-center mb-4 border-b border-gray-600 pb-2">
+      <div className="bg-white dark:bg-black/90 border border-gray-200 dark:border-gray-600 p-4 rounded-lg shadow-lg w-[700px]">
+        <div className="flex justify-between items-center mb-4 border-b border-gray-200 dark:border-gray-600 pb-2">
           <span className={`text-lg font-semibold ${textColorClass}`}>{item.name}</span>
           <div className="flex gap-4">
             <span>AC: {item.defense}</span>
@@ -249,14 +250,9 @@ function ItemTooltip({ item, isEquipped }: { item: Item; isEquipped?: boolean })
     );
   }
 
-  // Helper to check if any resist stats exist
-  const hasResists = item.stats?.poison_resist || item.stats?.magic_resist || 
-                    item.stats?.disease_resist || item.stats?.fire_resist || 
-                    item.stats?.cold_resist;
-
   return (
-    <div className="bg-black/90 border border-gray-600 p-4 rounded-lg shadow-lg w-[300px]">
-      <div className="flex justify-between items-center mb-4 border-b border-gray-600 pb-2">
+    <div className="bg-white dark:bg-black/90 border border-gray-200 dark:border-gray-600 p-4 rounded-lg shadow-lg w-[300px]">
+      <div className="flex justify-between items-center mb-4 border-b border-gray-200 dark:border-gray-600 pb-2">
         <span className={`text-lg font-semibold ${textColorClass}`}>{item.name}</span>
       </div>
       
@@ -266,16 +262,11 @@ function ItemTooltip({ item, isEquipped }: { item: Item; isEquipped?: boolean })
           <span>Value: {item.value}</span>
         </div>
 
-        <div className="h-px bg-gray-600 my-2" />
-
-        {/* Class restrictions */}
-        <div className="text-sm text-gray-400 mb-2">
+        {/* Add class restrictions */}
+        <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
           Classes: {getUsableClasses(item.classes).join(", ")}
         </div>
 
-        <div className="h-px bg-gray-600 my-2" />
-
-        {/* Attributes */}
         {renderStatLine('STR', item.stats?.strength, item.heroic_stats?.strength)}
         {renderStatLine('STA', item.stats?.stamina, item.heroic_stats?.stamina)}
         {renderStatLine('AGI', item.stats?.agility, item.heroic_stats?.agility)}
@@ -283,11 +274,6 @@ function ItemTooltip({ item, isEquipped }: { item: Item; isEquipped?: boolean })
         {renderStatLine('INT', item.stats?.intelligence, item.heroic_stats?.intelligence)}
         {renderStatLine('WIS', item.stats?.wisdom, item.heroic_stats?.wisdom)}
         {renderStatLine('CHA', item.stats?.charisma, item.heroic_stats?.charisma)}
-
-        {/* Only show divider if there are any resists */}
-        {hasResists && <div className="h-px bg-gray-600 my-2" />}
-
-        {/* Resists */}
         {renderStatLine('PR', item.stats?.poison_resist, item.heroic_stats?.poison_resist)}
         {renderStatLine('MR', item.stats?.magic_resist, item.heroic_stats?.magic_resist)}
         {renderStatLine('DR', item.stats?.disease_resist, item.heroic_stats?.disease_resist)}
@@ -523,13 +509,13 @@ export function EquipmentBuilder() {
 
   return (
     <div className="flex gap-4">
-      <div className="bg-card text-card-foreground p-4 rounded-lg border w-[900px] flex-shrink-0">
-        <h2 className="text-center text-lg font-bold border-b pb-2">Character Equipment</h2>
+      <div className="bg-card dark:bg-card text-card-foreground p-4 rounded-lg border border-gray-200 dark:border-gray-800 w-[900px] flex-shrink-0">
+        <h2 className="text-center text-lg font-bold border-b border-gray-200 dark:border-gray-800 pb-2">Character Equipment</h2>
         
         <div className="my-4">
           <button 
             onClick={() => setIsClassesOpen(!isClassesOpen)}
-            className="w-full flex items-center justify-between px-4 py-2 bg-muted rounded-lg hover:bg-muted/80 transition-colors"
+            className="w-full flex items-center justify-between px-4 py-2 bg-gray-100 dark:bg-muted rounded-lg hover:bg-gray-200 dark:hover:bg-muted/80 transition-colors"
           >
             <span className="font-medium">
               Classes ({selectedClasses.length}/3): {selectedClasses.join(", ")}
@@ -554,8 +540,8 @@ export function EquipmentBuilder() {
                     selectedClasses.includes(cls)
                       ? "bg-primary text-primary-foreground"
                       : selectedClasses.length >= 3 && !selectedClasses.includes(cls)
-                        ? "bg-muted/50 text-muted-foreground cursor-not-allowed"
-                        : "bg-muted hover:bg-muted/80"
+                        ? "bg-gray-100 dark:bg-muted/50 text-gray-500 dark:text-muted-foreground cursor-not-allowed"
+                        : "bg-gray-100 dark:bg-muted hover:bg-gray-200 dark:hover:bg-muted/80"
                   }`}
                   disabled={selectedClasses.length >= 3 && !selectedClasses.includes(cls)}
                 >
@@ -567,8 +553,8 @@ export function EquipmentBuilder() {
         </div>
 
         <div className="flex gap-4 px-4">
-          <div className="w-[500px] p-4 border rounded bg-border">
-            <div className="text-base bg-card p-6 rounded">
+          <div className="w-[500px] p-4 border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-border">
+            <div className="text-base bg-gray-50 dark:bg-card p-6 rounded">
               <div className="flex gap-8">
                 <div className="w-[220px]">
                   <p className="text-muted-foreground text-sm mb-1">Health</p>
@@ -588,7 +574,7 @@ export function EquipmentBuilder() {
                   <p className="text-lg font-medium">HEAL: {totalStats.combat.heal}</p>
                 </div>
               </div>
-              <div className="h-px bg-border my-4" />
+              <div className="h-px bg-gray-200 dark:bg-border my-4" />
               <div className="flex gap-8">
                 <div className="w-[220px]">
                   <p className="text-muted-foreground text-sm mb-1">Attributes</p>
@@ -688,7 +674,7 @@ export function EquipmentBuilder() {
             </div>
           </div>
 
-          <div className="p-4 border rounded bg-border h-fit">
+          <div className="p-4 border border-gray-200 dark:border-gray-800 rounded bg-white dark:bg-border h-fit">
             <div className="grid" style={{ 
               gridTemplateColumns: 'repeat(4, 64px)',
               gap: '2px',
@@ -765,8 +751,8 @@ export function EquipmentBuilder() {
         </div>
       </div>
 
-      <div className="bg-card text-card-foreground p-4 rounded-lg border w-[300px] overflow-visible">
-        <h2 className="text-center text-lg font-bold border-b pb-2">Available Items</h2>
+      <div className="bg-white dark:bg-card text-card-foreground p-4 rounded-lg border border-gray-200 dark:border-gray-800 w-[300px] overflow-visible">
+        <h2 className="text-center text-lg font-bold border-b border-gray-200 dark:border-gray-800 pb-2">Available Items</h2>
         
         {/* Search and Filters */}
         <div className="space-y-2 mt-4">
@@ -777,7 +763,7 @@ export function EquipmentBuilder() {
               placeholder="Search items..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-3 py-2 bg-muted rounded-lg border border-border text-sm"
+              className="w-full px-3 py-2 bg-gray-100 dark:bg-muted rounded-lg border border-gray-200 dark:border-gray-800 text-sm"
             />
             {searchTerm && (
               <button
@@ -795,7 +781,7 @@ export function EquipmentBuilder() {
             <select
               value={selectedSlot ?? ""}
               onChange={(e) => setSelectedSlot(e.target.value ? Number(e.target.value) : null)}
-              className="w-[60%] px-2 py-1 bg-muted rounded border border-border text-sm"
+              className="w-[60%] px-2 py-1 bg-gray-100 dark:bg-muted rounded border border-gray-200 dark:border-gray-800 text-sm"
             >
               <option value="">All Slots</option>
               {Object.entries(SLOT_FILTER_NAMES).map(([id, name]) => (
@@ -807,7 +793,7 @@ export function EquipmentBuilder() {
             <select
               value={selectedRarity ?? ""}
               onChange={(e) => setSelectedRarity(e.target.value ? Number(e.target.value) : null)}
-              className="w-[40%] px-2 py-1 bg-muted rounded border border-border text-sm"
+              className="w-[40%] px-2 py-1 bg-gray-100 dark:bg-muted rounded border border-gray-200 dark:border-gray-800 text-sm"
             >
               <option value="">Rarity</option>
               <option value="1">Normal</option>
@@ -820,7 +806,7 @@ export function EquipmentBuilder() {
           <select
             value={selectedStat ?? ""}
             onChange={(e) => setSelectedStat(e.target.value || null)}
-            className="w-full px-2 py-1 bg-muted rounded border border-border text-sm"
+            className="w-full px-2 py-1 bg-gray-100 dark:bg-muted rounded border border-gray-200 dark:border-gray-800 text-sm"
           >
             <option value="">All Stats</option>
             {availableStats.map(stat => (
@@ -936,9 +922,7 @@ function EquipmentSlot({
   const [showTooltip, setShowTooltip] = useState(false)
 
   return (
-    <div
-      className="w-16 h-16 flex items-center justify-center text-xs text-center relative bg-card"
-    >
+    <div className="w-16 h-16 flex items-center justify-center text-xs text-center relative bg-white dark:bg-card border border-gray-200 dark:border-gray-800">
       {equippedItem ? (
         <div 
           className="relative w-full h-full flex items-center justify-center group"
@@ -949,7 +933,7 @@ function EquipmentSlot({
             <img 
               src={iconPath} 
               alt={id} 
-              className="absolute inset-0 w-full h-full opacity-10 pointer-events-none"
+              className="absolute inset-0 w-full h-full opacity-20 dark:opacity-10 pointer-events-none [filter:brightness(0)_contrast(1)] dark:[filter:brightness(1)_contrast(1)]"
             />
           )}
           <span className="text-[10px] leading-tight px-0.5 w-full text-center break-words relative z-10">
@@ -973,7 +957,7 @@ function EquipmentSlot({
           <img 
             src={iconPath} 
             alt={id} 
-            className="w-8 h-8 opacity-30"
+            className="w-8 h-8 opacity-50 dark:opacity-30 [filter:brightness(0)_contrast(1)] dark:[filter:brightness(1)_contrast(1)]"
           />
         )
       )}
@@ -1042,7 +1026,7 @@ function AvailableItem({
         ref={itemRef}
         className={`flex items-center p-2 rounded-lg border ${borderClass} ${
           isSelected ? 'ring-2 ring-blue-500' : ''
-        } ${canUse ? 'cursor-pointer hover:bg-gray-700' : 'opacity-50 cursor-not-allowed'}`}
+        } ${canUse ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700' : 'opacity-50 cursor-not-allowed'} bg-white dark:bg-transparent`}
         onClick={() => canUse && onSelect()}
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
